@@ -1,12 +1,13 @@
 const w : number = window.innerWidth
 const h : number = window.innerHeight
-const scGap : number = 0.02
+const parts : number = 5
+const scGap : number = 0.02 / parts
 const foreColor : string = "#3F51B5"
 const backColor : string = "#212121"
 const delay : number = 30
 const sizeFactor : number = 2.9
 const nodes : number = 5
-const parts : number = 5
+
 
 class ScaleUtil {
 
@@ -146,7 +147,9 @@ class LDBNode {
 
     draw(context : CanvasRenderingContext2D) {
         DrawingUtil.drawLDBNode(context, this.i, this.state.scale)
-        this.next.draw(context)
+        if (this.next) {
+            this.next.draw(context)
+        }
     }
 
     update(cb : Function) {
