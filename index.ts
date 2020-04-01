@@ -19,6 +19,35 @@ class ScaleUtil {
     }
 }
 
+class DrawingUtil {
+
+    static drawBarPart(context : CanvasRenderingContext2D, i : number,  scale : number, size : number, h : number) {
+        const sci : number = ScaleUtil.divideScale(scale, i, parts)
+        const initY : number = h / 6 + (i * size)
+        const y : number = initY + (h - initY) * sci
+        context.save()
+        context.translate(0, y)
+        context.fillRect(0, -size / 2, size, size)
+        context.restore()
+    }
+
+    static drawBarParts(context : CanvasRenderingContext2D, scale : number, size : number, h : number) {
+        for (var i = 0; i < parts; i++) {
+            DrawingUtil.drawBarPart(context, i, scale, size, h)
+        }
+    }
+
+    static drawLDPNode(context : CanvasRenderingContext2D, i : number, scale : number) {
+        const gap : number = w / (nodes + 1)
+        const size : number = gap / sizeFactor
+        context.fillStyle = foreColor
+        context.save()
+        context.translate(gap * (i + 1), 0)
+        DrawingUtil.drawBarParts(context, scale, size, h)
+        context.restore()
+    }
+}
+
 class Stage {
 
     canvas : HTMLCanvasElement = document.createElement('canvas')
