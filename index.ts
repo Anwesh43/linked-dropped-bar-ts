@@ -188,3 +188,26 @@ class LinkedDropBar {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    ldb : LinkedDropBar = new LinkedDropBar()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.ldb.draw(context)
+    }
+
+    hnadleTap(cb : Function) {
+        this.ldb.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.ldb.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+
+}
