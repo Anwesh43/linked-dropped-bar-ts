@@ -37,7 +37,7 @@ class DrawingUtil {
         }
     }
 
-    static drawLDPNode(context : CanvasRenderingContext2D, i : number, scale : number) {
+    static drawLDBNode(context : CanvasRenderingContext2D, i : number, scale : number) {
         const gap : number = w / (nodes + 1)
         const size : number = gap / sizeFactor
         context.fillStyle = foreColor
@@ -120,5 +120,48 @@ class Animator {
             this.animated = false
             clearInterval(this.interval)
         }
+    }
+}
+
+class LDBNode {
+
+    next : LDBNode
+    prev : LDBNode
+    state : State = new State()
+
+    constructor(private i : number) {
+        this.addNeighbor()
+    }
+
+    addNeighbor() {
+        if (this.i < nodes - 1) {
+            this.next = new LDBNode(this.i + 1)
+            this.next.prev = this
+        }
+    }
+
+    draw(context : CanvasRenderingContext2D) {
+        DrawingUtil.drawLDBNode(context, this.i, this.state.scale)
+        this.next.draw(context)
+    }
+
+    update(cb : Function) {
+        this.state.update(cb)
+    }
+
+    startUpdating(cb : Function) {
+        this.state.startUpdating(cb)
+    }
+
+    getNext(dir : number, cb : Function) : LDBNode {
+        var curr : LDBNode = this.prev
+        if (dir == 1) {
+            curr = this.next
+        }
+        if (curr) {
+            return curr
+        }
+        cb()
+        return this
     }
 }
